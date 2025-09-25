@@ -1,0 +1,13 @@
+{% extends 'repairs/base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2>Удалить материал</h2>
+        <p>Вы уверены, что хотите удалить материал "{{ material.name }}"?</p>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Удалить</button>
+            <a href="{% url 'apartment_detail' material.room.apartment.id %}" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+{% endblock %}

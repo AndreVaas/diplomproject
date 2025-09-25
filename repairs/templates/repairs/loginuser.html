@@ -1,0 +1,18 @@
+{% extends 'repairs/base.html' %}
+
+
+{% block content %}
+<h2>Войти</h2>
+
+{% if error %}
+    <p style="color:red">{{ error }}</p>
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Войти</button>
+</form>
+
+<p>Нет аккаунта? <a href="{% url 'signupuser' %}">Зарегистрируйтесь</a></p>
+{% endblock %}

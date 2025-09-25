@@ -1,0 +1,18 @@
+{% extends "repairs/base.html" %}
+
+
+{% block content %}
+<h2>Мои проекты</h2>
+<a href="{% url 'apartment_create' %}">➕ Добавить квартиру</a>
+<ul>
+    {% for apt in apartments %}
+    <li>
+        <a href="{% url 'apartment_detail' apt.pk %}">
+            {{ apt.name }} — {{ apt.total_area }} м²
+        </a>
+    </li>
+    {% empty %}
+    <li>Нет квартир</li>
+    {% endfor %}
+</ul>
+{% endblock %}

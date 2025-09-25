@@ -1,0 +1,18 @@
+{% extends 'repairs/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Добавить работу в {{ room.name }}</h2>
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a href="{% url 'apartment_detail' room.apartment.id %}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+{% endblock %}

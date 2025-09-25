@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Ваш калькулятор для планирования ремонта</title>
+    <style>
+
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f2f2f2; }
+        header, footer { background: #333; color: #fff; padding: 1em; text-align: center; }
+        nav a { color: #fff; margin: 0 30px; text-decoration: none; }
+        main { padding: 20px; }
+        form.logout-button { display: inline; }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            width: 125px;
+            height: auto;
+            margin-left: 1px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .content {
+    flex-grow: 1;
+}
+        .footer {
+            margin-top: auto;
+        }
+        .container apartment {
+        font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+<header>
+    <img src="{% static 'repairs/logo.png' %}" alt="Logo" class="logo">
+    <h1> Калькулятор для планирования ремонта</h1>
+    <nav>
+        <a href="{% url 'apartment' %}">Мои Проекты</a>
+        {% if user.is_authenticated %}
+        <span>Пользователь: {{ user.username }} | </span>
+        <form method="POST" action="{% url 'logoutuser' %}" class="logout-button">
+            {% csrf_token %}
+            <button type="submit" style="background:none; border:none; color:#fff; cursor:pointer; font-size: 16px;">
+                Выйти
+            </button>
+        </form>
+        {% else %}
+        <a href="{% url 'loginuser' %}">Войти</a>
+        <a href="{% url 'signupuser' %}">Регистрация</a>
+        {% endif %}
+    </nav>
+    <img src="{% static 'repairs/logo.png' %}" alt="Logo" class="logo">
+</header>
+
+<main class="content">
+    {% block content %}
+    {% endblock %}
+</main>
+
+<footer>
+    <p>Калькулятор для планирования ремонта. Разработал: Васильев А.В &copy; 2025</p>
+
+</footer>
+</div>
+</body>
+</html>
