@@ -3,16 +3,19 @@
 
 {% block content %}
 <h2>Мои проекты</h2>
-<a href="{% url 'apartment_create' %}">➕ Добавить квартиру</a>
-<ul>
-    {% for apt in apartments %}
-    <li>
-        <a href="{% url 'apartment_detail' apt.pk %}">
-            {{ apt.name }} — {{ apt.total_area }} м²
-        </a>
-    </li>
-    {% empty %}
-    <li>Нет квартир</li>
-    {% endfor %}
-</ul>
+<a href="{% url 'apartment_create' %}">Добавить Проект</a>
+{% if apartments %}
+        <ul>
+            {% for apt in apartments %}
+                <li>
+                    {{ apt.name }} - {{ apt.address }} ({{ apt.area }} м²)
+                    <a href="{% url 'apartment_detail' apt.id %}">Детали</a>
+                    <a href="{% url 'apartment_update' apt.id %}">Редактировать</a>
+                    <a href="{% url 'apartment_delete' apt.id %}" style="color: #ff4d4d;">Удалить</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>У вас пока нет проектов.</p>
+    {% endif %}
 {% endblock %}

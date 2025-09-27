@@ -5,7 +5,7 @@ from .models import Apartment, Room, Work, Material
 class ApartmentForm(forms.ModelForm):
     class Meta:
         model = Apartment
-        fields = ['name', 'address', 'total_area']
+        fields = ['name', 'address', 'total_area', 'image']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'address': forms.TextInput(attrs={'class': 'form-control'}),
@@ -15,13 +15,14 @@ class ApartmentForm(forms.ModelForm):
             'name': 'Название',
             'address': 'Адрес',
             'total_area': 'Общая площадь (м²)',
+            'image': 'Фото (план проекта)',
         }
 
 
 class WorkForm(forms.ModelForm):
     class Meta:
         model = Work
-        fields = ['name', 'description', 'cost', 'date']
+        fields = ['name', 'description', 'cost', 'date', 'image']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
@@ -33,6 +34,7 @@ class WorkForm(forms.ModelForm):
             'description': 'Описание',
             'cost': 'Стоимость (руб.)',
             'date': 'Дата',
+            'image': 'Фото выполненной работы',
         }
 
 

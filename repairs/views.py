@@ -6,6 +6,7 @@ from .forms import ApartmentForm, RoomForm, WorkForm, MaterialForm
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
+from django.contrib import messages
 
 
 def signup_user(request):
@@ -69,7 +70,7 @@ def apartment_detail(request, pk):
 @login_required
 def apartment_create(request):
     if request.method == 'POST':
-        form = ApartmentForm(request.POST)
+        form = ApartmentForm(request.POST, request.FILES)
         if form.is_valid():
             apartment = form.save(commit=False)
             apartment.user = request.user
@@ -81,6 +82,30 @@ def apartment_create(request):
     else:
         form = ApartmentForm()
     return render(request, 'repairs/apartment_form.html', {'form': form})
+
+
+@login_required
+def apartment_update(request, pk):
+    apartment = get_object_or_404(Apartment, pk=pk, user=request.user)
+    if request.method == 'POST':
+        form = ApartmentForm(request.POST, request.FILES, instance=apartment)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Проект успешно обновлён!')
+            return redirect('apartment_detail', pk=pk)
+    else:
+        form = ApartmentForm(instance=apartment)
+    return render(request, 'repairs/apartment_form.html', {'form': form, 'apartment': apartment})
+
+
+@login_required
+def apartment_delete(request, pk):
+    apartment = get_object_or_404(Apartment, pk=pk, user=request.user)
+    if request.method == 'POST':
+        apartment.delete()
+        messages.success(request, 'Проект успешно удалён!')
+        return redirect('apartment')
+    return render(request, 'repairs/apartment_confirm_delete.html', {'apartment': apartment})
 
 
 @login_required
@@ -106,7 +131,7 @@ def room_create(request, apartment_id):
 def work_create(request, room_id):
     room = get_object_or_404(Room, pk=room_id, apartment__user=request.user)
     if request.method == 'POST':
-        form = WorkForm(request.POST)
+        form = WorkForm(request.POST, request.FILES)
         if form.is_valid():
             work = form.save(commit=False)
             work.room = room

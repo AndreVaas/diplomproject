@@ -9,6 +9,7 @@ class Apartment(models.Model):
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=255, blank=True)
     total_area = models.FloatField()
+    image = models.ImageField(upload_to='apartment_images/', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -20,7 +21,7 @@ class Apartment(models.Model):
     #     rooms = self.room_set.all()
     #     works_cost = sum(room.work_set.aggregate(total_cost=Sum('cost'))['total_cost'] or 0 for room in rooms)
     #     materials_cost = sum(
-    #         room.material_set.aggregate(total_cost=Sum(F('cost') * F('quantity')))['total_cost'] or 0 for room in rooms)
+    #     room.material_set.aggregate(total_cost=Sum(F('cost') * F('quantity')))['total_cost'] or 0 for room in rooms)
     #     return works_cost + materials_cost
 
     def total_cost(self):
@@ -54,6 +55,7 @@ class Work(models.Model):
     description = models.TextField(blank=True)
     cost = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
+    image = models.ImageField(upload_to='work_images/', blank=True, null=True)
 
     def __str__(self):
         return self.name
