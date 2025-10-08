@@ -3,15 +3,15 @@
 
 {% block content %}
 <h2>Мои проекты</h2>
-<a href="{% url 'apartment_create' %}">Добавить Проект</a>
+<a href="{% url 'apartment_create' %}" class="button-primary">Добавить Проект</a>
 {% if apartments %}
-        <ul>
+        <ul class="project-list">
             {% for apt in apartments %}
                 <li>
                     {{ apt.name }} - {{ apt.address }} ({{ apt.area }} м²)
-                    <a href="{% url 'apartment_detail' apt.id %}">Детали</a>
-                    <a href="{% url 'apartment_update' apt.id %}">Редактировать</a>
-                    <a href="{% url 'apartment_delete' apt.id %}" style="color: #ff4d4d;">Удалить</a>
+                    <a href="{% url 'apartment_detail' apt.id %}" class="list-button-secondary">Детали</a>
+                    <a href="{% url 'apartment_update' apt.id %}" class="list-button-secondary">Редактировать</a>
+                    <a href="{% url 'apartment_delete' apt.id %}" class="list-delete">Удалить</a>
                 </li>
             {% endfor %}
         </ul>

@@ -1,99 +1,101 @@
 {% extends "repairs/base.html" %}
 
-
 {% block content %}
-<div class="container mt-5">
-    <h1>{{apartment.name}}</h1>
-    <span>Адрес: {{apartment.address}}</span>
-    <span>Фото проекта:</span>
-    {% if apartment.image %}
-    <img src="{{ apartment.image.url }}" alt="Фото проекта"
-         style="max-width: 300px; height: auto; margin-bottom: 20px;">
-    {% else %}
-    <p>Нет фото проекта</p>
-    {% endif %}
-    <span>Площадь: {{ apartment.total_area }} м²</span>
-    <span>Бюджет на работы: {{ apartment.works_cost|floatformat:2 }} руб.</span>
-    <span>Бюджет на материалы: {{ apartment.materials_cost|floatformat:2 }} руб.</span>
-    <span>Общий бюджет: {{ apartment.total_cost|floatformat:2 }} руб.</span>
-    <a href="{% url 'room_create' apartment.id %}">Добавить комнату</a>
+<div class="container">
+    <div class="project-info">
+        <div class="text">
+            <h1>{{ apartment.name }}</h1>
+            <span><strong>Адрес:</strong> {{ apartment.address }}</span>
+            <span><strong>Площадь:</strong> {{ apartment.total_area }} m²</span>
+            <span><strong>Бюджет на работы:</strong> {{ apartment.works_cost|floatformat:2 }} руб.</span>
+            <span><strong>Бюджет на материалы:</strong> {{ apartment.materials_cost|floatformat:2 }} руб.</span>
+            <span><strong>Общий бюджет:</strong> {{ apartment.total_cost|floatformat:2 }} руб.</span>
+        </div>
+        <div class="image">
+            {% if apartment.image %}
+            <a href="{% url 'image_full' apartment.id %}" class="image-link">
+                <img src="{{ apartment.image.url }}" alt="Фото проекта" class="project-image">
+            </a>
+            <h2><strong>План проекта</strong></h2>
+            {% else %}
+            <p>Нет фото проекта</p>
+            {% endif %}
+        </div>
+    </div>
+    <a href="{% url 'apartment_update' apartment.id %}" class="button-secondary">Редактировать проект</a>
+
     <h3>Комнаты:</h3>
-    <ul>
+    <a href="{% url 'room_create' apartment.id %}" class="button-primary">Добавить комнату</a>
+
+    <ul class="room-list">
         {% for room in rooms %}
-        <li>{{ room.name }} — (Площадь: {{ room.area }} м²)
-            <a href="{% url 'work_create' room.id %}">Добавить работу</a>
-            <a href="{% url 'material_create' room.id %}">Добавить материал</a>
-            {% if room.work_set.all %}
-            <h5>Работы</h5>
-            <table>
-                <thead>
-                <tr>
-                    <th>Название</th>
-                    <th>Описание</th>
-                    <th>Фото</th>
-                    <th>Стоимость</th>
-                    <th>Дата</th>
-                    <th>Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for work in room.work_set.all %}
-                <tr>
-                    <td>{{ work.name }}</td>
-                    <td>{{ work.description|default:"—" }}</td>
-                    <td>
-                        {% if work.image %}
-                        <img src="{{ work.image.url }}" alt="{{ work.name }}" style="max-width: 100px; height: auto;">
-                        {% else %}
-                        Нет фото
-                        {% endif %}
-                    </td>
-                    <td>{{ work.cost }}</td>
-                    <td>{{ work.date }}</td>
-                    <td>
-                        <a href="{% url 'work_edit' work.id %}" class="btn btn-sm btn-warning">Редактировать</a>
-                        <a href="{% url 'work_delete' work.id %}" class="btn btn-sm btn-danger">Удалить</a>
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            {% endif %}
-            {% if room.material_set.all %}
-            <h5 class="mt-3">Материалы</h5>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Название</th>
-                    <th>Количество</th>
-                    <th>Единица</th>
-                    <th>Стоимость</th>
-                    <th>Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for material in room.material_set.all %}
-                <tr>
-                    <td>{{ material.name }}</td>
-                    <td>{{ material.quantity }}</td>
-                    <td>{{ material.unit }}</td>
-                    <td>{{ material.cost }}</td>
-                    <td>
-                        <a href="{% url 'material_edit' material.id %}" class="btn btn-sm btn-warning">Редактировать</a>
-                        <a href="{% url 'material_delete' material.id %}" class="btn btn-sm btn-danger">Удалить</a>
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            {% endif %}
+        <li class="room-item">
+            <div class="room-header">
+                <span class="room-name">{{ room.name }} — (Площадь: {{ room.area }} m²)</span>
+                <a href="{% url 'room_edit' room.id %}" class="button-secondary">Редактировать</a>
+            </div>
+            <div class="room-actions">
+                <a href="{% url 'work_create' room.id %}" class="button-secondary">Добавить работу</a>
+                <a href="{% url 'room_delete' room.id %}" class="button-delete">Удалить комнату</a>
+                {% if room.work_set.all %}
+                <table class="table one">
+                    <caption>Выполняемые работы</caption>
+                    <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Описание</th>
+                        <th>Фото</th>
+                        <th>Стоимость</th>
+                        <th>Дата</th>
+                        <th>Материалы</th>
+                        <th>Действия</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                 {% for work in room.work_set.all %}
+                    <tr>
+                        <td>{{ work.name }}</td>
+                        <td>{{ work.description|default:"—" }}</td>
+                        <td>
+                            {% if work.image %}
+                            <img src="{{ work.image.url }}" alt="{{ work.name }}" style="max-width: 100px; height: auto;">
+                            {% else %}
+                            <!-- Пустая ячейка, если фото нет -->
+                            {% endif %}
+                        </td>
+                        <td>{{ work.cost }}</td>
+                        <td>{{ work.date }}</td>
+                        <td>
+                            {% if work.material_set.all %}
+                            <ul>
+                                {% for material in work.material_set.all %}
+                                <li>{{ material.name }} ({{ material.quantity }} {{ material.unit }}, {{ material.cost }} руб.)</li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            Нет материалов
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="work-actions">
+                                <a href="{% url 'work_edit' work.id %}" class="button-secondary">Редактировать</a>
+                                <a href="{% url 'work_delete' work.id %}" class="button-delete">Удалить</a>
+                                <a href="{% url 'material_create' work.id %}" class="button-secondary">Добавить материал</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
         </li>
         {% empty %}
-        <li class="list-group-item">Нет комнат</li>
+        <li>Нет комнат</li>
         {% endfor %}
     </ul>
-    <a href="{% url 'apartment' %}">Назад к проектам</a>
-    <a href="{% url 'apartment_update' apartment.id %}">Редактировать проект</a>
+    <div>
+        <a href="{% url 'apartment' %}" class="button-secondary">Назад к проектам</a>
+    </div>
 </div>
 {% endblock %}
-

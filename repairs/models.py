@@ -34,8 +34,14 @@ class Apartment(models.Model):
 
     def materials_cost(self):
         rooms = self.room_set.all()
-        return sum(room.material_set.aggregate(total_cost=Sum(F('cost') * F('quantity'), output_field=DecimalField()))[
-                       'total_cost'] or 0 for room in rooms)
+        total_materials_cost = 0
+        for room in rooms:
+            for work in room.work_set.all():
+                materials_cost = work.material_set.aggregate(
+                    total_cost=Sum(F('cost') * F('quantity'), output_field=DecimalField())
+                )['total_cost'] or 0
+                total_materials_cost += materials_cost
+        return total_materials_cost
 
 
 # Разбивка по комнатам(кухня, ванна, и тд) (добавил 02.08.25)
@@ -63,7 +69,7 @@ class Work(models.Model):
 
 # Список материалов и подсчет нужного количества, подсчет квадратуры (добавил 02.08.25)
 class Material(models.Model):
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    work = models.ForeignKey(Work, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100)
     quantity = models.FloatField()
     unit = models.CharField(max_length=20)  # например: м², кг, л

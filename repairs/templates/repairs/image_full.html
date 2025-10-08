@@ -1,0 +1,13 @@
+{% extends "repairs/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Полноразмерное фото проекта</h1>
+    {% if apartment.image %}
+    <img src="{{ apartment.image.url }}" alt="Полноразмерное фото проекта" style="max-width: 800px; height: auto;">
+    {% else %}
+    <p>Фото проекта отсутствует.</p>
+    {% endif %}
+    <a href="{% url 'apartment_detail' apartment.id %}" class="button-secondary">Назад</a>
+</div>
+{% endblock %}

@@ -3,12 +3,22 @@
 
 
 {% block content %}
-<h2>Добавить новую квартиру</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Сохранить</button>
-</form>
-<br><br>
-<a href="{% url 'apartment' %}">← Назад</a>
+<div class="container">
+    <div class="form-container">
+        <h2>{% if form.instance.pk %}Редактировать проект{% else %}Добавить проект{% endif %}</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+            {% endfor %}
+            <div class="form-group">
+                <button type="submit">Сохранить</button>
+            </div>
+        </form>
+        <a href="{% url 'apartment' %}" class="button-secondary">Назад</a>
+    </div>
+</div>
 {% endblock %}

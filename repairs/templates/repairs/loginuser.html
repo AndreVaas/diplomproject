@@ -2,17 +2,28 @@
 
 
 {% block content %}
-<h2>Войти</h2>
+<div class="container">
+    <div class="form-container">
+        <h2>Вход в приложение</h2>
 
-{% if error %}
-    <p style="color:red">{{ error }}</p>
-{% endif %}
+        {% if error %}
+        <div class="custom-alert">{{ error }}</div>
+        {% endif %}
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Войти</button>
-</form>
+        <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+            {% endfor %}
+            <div class="form-group">
+                <button type="submit" class="button-secondary">Войти</button>
+            </div>
+        </form>
 
-<p>Нет аккаунта? <a href="{% url 'signupuser' %}">Зарегистрируйтесь</a></p>
+        <p>У вас нет аккаунта? <a href="{% url 'signupuser' %}" class="button-primary">Зарегистрируйтесь!</a></p>
+    </div>
+</div>
 {% endblock %}

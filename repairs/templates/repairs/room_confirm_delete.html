@@ -1,0 +1,13 @@
+{% extends "repairs/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Подтверждение удаления</h2>
+    <p>Вы уверены, что хотите удалить комнату "{{ room.name }}"?</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="button-delete">Удалить</button>
+        <a href="{% url 'apartment_detail' room.apartment.id %}" class="button-secondary">Отмена</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,13 +1,13 @@
 {% extends 'repairs/base.html' %}
 
 {% block content %}
-    <div class="container mt-5">
+    <div class="container">
         <h2>Удалить работу</h2>
         <p>Вы уверены, что хотите удалить работу "{{ work.name }}"?</p>
-        <form method="POST">
+        <form method="POST" class="custom-form">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Удалить</button>
-            <a href="{% url 'apartment_detail' work.room.apartment.id %}" class="btn btn-secondary">Отмена</a>
+            <button type="submit" class="button-delete">Удалить</button>
+            <a href="{% url 'apartment_detail' work.room.apartment.id %}" class="button-secondary">Отмена</a>
         </form>
     </div>
 {% endblock %}

@@ -128,6 +128,31 @@ def room_create(request, apartment_id):
 
 
 @login_required
+def room_edit(request, room_id):
+    room = get_object_or_404(Room, pk=room_id, apartment__user=request.user)
+    if request.method == 'POST':
+        form = RoomForm(request.POST, instance=room)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Комната успешно обновлена!')
+            return redirect('apartment_detail', pk=room.apartment.id)
+    else:
+        form = RoomForm(instance=room)
+    return render(request, 'repairs/room_form.html', {'form': form, 'apartment': room.apartment})
+
+
+@login_required
+def room_delete(request, room_id):
+    room = get_object_or_404(Room, pk=room_id, apartment__user=request.user)
+    if request.method == 'POST':
+        apartment_id = room.apartment.id
+        room.delete()
+        messages.success(request, 'Комната успешно удалена!')
+        return redirect('apartment_detail', pk=apartment_id)
+    return render(request, 'repairs/room_confirm_delete.html', {'room': room})
+
+
+@login_required
 def work_create(request, room_id):
     room = get_object_or_404(Room, pk=room_id, apartment__user=request.user)
     if request.method == 'POST':
@@ -172,45 +197,51 @@ def work_delete(request, work_id):
 
 
 @login_required
-def material_create(request, room_id):  # (12.09.25) material_create: Создаёт материал, привязывает его к комнате.
-    room = get_object_or_404(Room, pk=room_id, apartment__user=request.user)
+def material_create(request, work_id):  # (12.09.25) material_create: Создаёт материал, привязывает его к комнате.
+    work = get_object_or_404(Work, pk=work_id)
     if request.method == 'POST':
         form = MaterialForm(request.POST)
         if form.is_valid():
             material = form.save(commit=False)
-            material.room = room
+            material.work = work
             material.save()
-            return redirect('apartment_detail', pk=room.apartment.id)
+            return redirect('apartment_detail', pk=work.room.apartment.id)
         else:
             return render(request, 'repairs/material_form.html',
-                          {'form': form, 'room': room, 'error': 'Пожалуйста, исправьте ошибки в форме'})
+                          {'form': form, 'work': work, 'error': 'Пожалуйста, исправьте ошибки в форме'})
     else:
         form = MaterialForm()
-    return render(request, 'repairs/material_form.html', {'form': form, 'room': room})
+    return render(request, 'repairs/material_form.html', {'form': form, 'work': work})
 
 
 @login_required
 def material_edit(request, material_id):  # (12.09.25) material_edit: Редактирует существующий материал.
-    material = get_object_or_404(Material, pk=material_id, room__apartment__user=request.user)
+    material = get_object_or_404(Material, pk=material_id,)
     if request.method == 'POST':
         form = MaterialForm(request.POST, instance=material)
         if form.is_valid():
             form.save()
-            return redirect('apartment_detail', pk=material.room.apartment.id)
+            return redirect('apartment_detail', pk=material.work.room.apartment.id)
         else:
             return render(request, 'repairs/material_form.html',
-                          {'form': form, 'room': material.room,
+                          {'form': form, 'work': material.work,
                            'error': 'Пожалуйста, исправьте ошибки в форме'})
     else:
         form = MaterialForm(instance=material)
-    return render(request, 'repairs/material_form.html', {'form': form, 'room': material.room})
+    return render(request, 'repairs/material_form.html', {'form': form, 'work': material.work})
 
 
 @login_required
 def material_delete(request, material_id):  # (12.09.25) material_delete: Удаляет материал с подтверждением.
-    material = get_object_or_404(Material, pk=material_id, room__apartment__user=request.user)
+    material = get_object_or_404(Material, pk=material_id)
     if request.method == 'POST':
         apartment_id = material.room.apartment.id
         material.delete()
         return redirect('apartment_detail', pk=apartment_id)
     return render(request, 'repairs/material_confirm_delete.html', {'material': material})
+
+
+@login_required
+def image_full(request, pk):
+    apartment = get_object_or_404(Apartment, pk=pk, user=request.user)
+    return render(request, 'repairs/image_full.html', {'apartment': apartment})

@@ -3,63 +3,35 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="icon" href="{% static 'repairs/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'repairs/styles.css' %}">
     <title>Ваш калькулятор для планирования ремонта</title>
-    <style>
-
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f2f2f2; }
-        header, footer { background: #333; color: #fff; padding: 1em; text-align: center; }
-        nav a { color: #fff; margin: 0 30px; text-decoration: none; }
-        main { padding: 20px; }
-        form.logout-button { display: inline; }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            width: 125px;
-            height: auto;
-            margin-left: 1px;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .content {
-    flex-grow: 1;
-}
-        .footer {
-            margin-top: auto;
-        }
-        .container apartment {
-        font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f2f2f2;
-        }
-    </style>
 </head>
 <body>
 <div class="container">
 <header>
-    <img src="{% static 'repairs/logo.png' %}" alt="Logo" class="logo">
-    <h1> Калькулятор для планирования ремонта</h1>
-    <nav>
-        <a href="{% url 'apartment' %}">Мои Проекты</a>
-        {% if user.is_authenticated %}
-        <span>Пользователь: {{ user.username }} | </span>
-        <form method="POST" action="{% url 'logoutuser' %}" class="logout-button">
-            {% csrf_token %}
-            <button type="submit" style="background:none; border:none; color:#fff; cursor:pointer; font-size: 16px;">
-                Выйти
-            </button>
-        </form>
-        {% else %}
-        <a href="{% url 'loginuser' %}">Войти</a>
-        <a href="{% url 'signupuser' %}">Регистрация</a>
-        {% endif %}
-    </nav>
-    <img src="{% static 'repairs/logo.png' %}" alt="Logo" class="logo">
-</header>
+        <div class="header-left">
+            <img src="{% static 'repairs/logo.png' %}" alt="Logo" class="logo">
+            <h1 >Калькулятор для планирования ремонта</h1>
+        </div>
+        <nav class="header-right">
+            <a href="{% url 'apartment' %}" style="background: none; padding: 0; color: #fff; text-decoration: none; margin-right: 30px;">Мои Проекты</a>
+            {% if user.is_authenticated %}
+            <span>Пользователь: {{ user.username }} </span>
+            <form method="POST" action="{% url 'logoutuser' %}" class="logout-button" style="margin-right: 20px;">
+                {% csrf_token %}
+                <button type="submit" class="nav-item">Выйти</button>
+            </form>
+            {% else %}
+            <a href="{% url 'loginuser' %}" class="nav-item" >Войти</a>
+            <a href="{% url 'signupuser' %}" class="nav-item">Регистрация</a>
+            {% endif %}
+        </nav>
+    </header>
 
 <main class="content">
     {% block content %}

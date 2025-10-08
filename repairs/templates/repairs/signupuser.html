@@ -2,17 +2,27 @@
 
 
 {% block content %}
-<h2>Регистрация</h2>
+<div class="container">
+    <div class="form-container">
+        <h2>Регистрация</h2>
 
-{% if error %}
-    <p style="color:red">{{ error }}</p>
-{% endif %}
+        {% if error %}
+        <div class="custom-alert">{{ error }}</div>
+        {% endif %}
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Зарегистрироваться</button>
-</form>
-
-<p>Уже есть аккаунт? <a href="{% url 'loginuser' %}">Войти</a></p>
+        <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+            {% endfor %}
+            <div class="form-group">
+                <button type="submit" class="button-primary">Зарегистрироваться</button>
+            </div>
+        </form>
+    </div>
+    <p>Уже есть аккаунт? <a href="{% url 'loginuser' %}" class="button-primary">Войти</a></p>
+</div>
 {% endblock %}
