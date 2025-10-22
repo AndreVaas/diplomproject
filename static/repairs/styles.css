@@ -502,15 +502,15 @@ nav {
     margin-top: 10px;
 }
 
-/* Удаляем общие стили для button-secondary и button-delete, чтобы избежать конфликтов */
+
 .button-secondary img, .button-delete img {
     vertical-align: middle;
 }
 
-/* Улучшенные стили для выпадающего меню с большей специфичностью */
+
 .dropdown .work-action-button,
 .dropdown .material-action-button {
-    background-color: #ffffff; /* фирменный жёлтый фон */
+    background-color: #ffffff; 
     border: 1px solid #8c8c8c;
     border-radius: 6px;
     padding: 5px 8px;
@@ -721,7 +721,7 @@ nav {
     margin-bottom: 10px;
 }
 .project-header h1 {
-    margin-right: 20px; /* Отступ текста от кнопки действий */
+    margin-right: 20px; 
 }
 
 .project-action-button {
@@ -761,5 +761,5 @@ nav {
 }
 
 .project-actions span {
-    margin-right: 20px; /* Отступ текста от кнопки "Перейти к комнатам" */
+    margin-right: 20px; 
 }
