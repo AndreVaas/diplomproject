@@ -22,7 +22,7 @@ class ApartmentForm(forms.ModelForm):
 class WorkForm(forms.ModelForm):
     class Meta:
         model = Work
-        fields = ['name', 'description', 'cost', 'date', 'image']
+        fields = ['name', 'description', 'cost', 'date',]
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
@@ -34,7 +34,6 @@ class WorkForm(forms.ModelForm):
             'description': 'Описание',
             'cost': 'Стоимость (руб.)',
             'date': 'Дата',
-            'image': 'Фото выполненной работы',
         }
 
 
@@ -55,16 +54,14 @@ class RoomForm(forms.ModelForm):
 class MaterialForm(forms.ModelForm):
     class Meta:
         model = Material
-        fields = ['name', 'quantity', 'unit', 'cost']
+        fields = ['name', 'quantity', 'cost']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
-            'unit': forms.TextInput(attrs={'class': 'form-control'}),
             'cost': forms.NumberInput(attrs={'class': 'form-control'}),
         }
         labels = {
             'name': 'Название',
             'quantity': 'Количество',
-            'unit': 'Единица измерения',
             'cost': 'Стоимость за единицу (руб.)',
         }

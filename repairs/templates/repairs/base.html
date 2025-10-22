@@ -6,20 +6,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
     <link rel="icon" href="{% static 'repairs/favicon.ico' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'repairs/styles.css' %}">
+    <script>
+    function toggleDropdown(event, dropdownId) {
+        event.preventDefault();
+        console.log("Toggle dropdown for:", dropdownId);
+
+        // Закрываем все открытые меню (и старые, и новые)
+        var allDropdowns = document.querySelectorAll(".dropdown-content, .proj-dropdown-content");
+        allDropdowns.forEach(function(d) {
+            if (d.id !== dropdownId) {
+                d.style.display = "none";
+            }
+        });
+
+        // Переключаем текущее меню
+        var dropdown = document.getElementById(dropdownId);
+        dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+    }
+
+    document.addEventListener("click", function(event) {
+        // Закрываем меню, если клик был вне блока dropdown или proj-dropdown
+        if (!event.target.closest(".dropdown") && !event.target.closest(".proj-dropdown")) {
+            var dropdowns = document.querySelectorAll(".dropdown-content, .proj-dropdown-content");
+            dropdowns.forEach(function(d) {
+                d.style.display = "none";
+            });
+        }
+    });
+</script>
     <title>Ваш калькулятор для планирования ремонта</title>
 </head>
 <body>
 <div class="container">
-<header>
+    <header>
         <div class="header-left">
-            <img src="{% static 'repairs/logo.png' %}" alt="Logo" class="logo">
-            <h1 >Калькулятор для планирования ремонта</h1>
+            <a href="{% url 'index' %}">
+                <img src="{% static 'repairs/logo.png' %}" alt="Logo" class="logo">
+            </a>
+            <h1>Приложение для планирования ремонта</h1>
         </div>
         <nav class="header-right">
-            <a href="{% url 'apartment' %}" style="background: none; padding: 0; color: #fff; text-decoration: none; margin-right: 30px;">Мои Проекты</a>
+            <a href="{% url 'apartment' %}"
+               style="background: none; padding: 0; color: #fff; text-decoration: none; margin-right: 30px;">Мои
+                Проекты</a>
             {% if user.is_authenticated %}
             <span>Пользователь: {{ user.username }} </span>
             <form method="POST" action="{% url 'logoutuser' %}" class="logout-button" style="margin-right: 20px;">
@@ -27,21 +60,21 @@
                 <button type="submit" class="nav-item">Выйти</button>
             </form>
             {% else %}
-            <a href="{% url 'loginuser' %}" class="nav-item" >Войти</a>
+            <a href="{% url 'loginuser' %}" class="nav-item">Войти</a>
             <a href="{% url 'signupuser' %}" class="nav-item">Регистрация</a>
             {% endif %}
         </nav>
     </header>
 
-<main class="content">
-    {% block content %}
-    {% endblock %}
-</main>
+    <main class="content">
+        {% block content %}
+        {% endblock %}
+    </main>
 
-<footer>
-    <p>Калькулятор для планирования ремонта. Разработал: Васильев А.В &copy; 2025</p>
+    <footer>
+        <p>Приложение для планирования ремонта. Разработал: Васильев А.В &copy; 2025</p>
 
-</footer>
+    </footer>
 </div>
 </body>
 </html>

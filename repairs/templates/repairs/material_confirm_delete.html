@@ -7,7 +7,7 @@
         <form method="POST" class="custom-form">
             {% csrf_token %}
             <button type="submit" class="button-delete">Удалить</button>
-            <a href="{% url 'apartment_detail' material.room.apartment.id %}" class="button-secondary">Отмена</a>
+            <a href="{% url 'apartment_detail' pk=material.work.room.apartment.id %}" class="button-secondary">Отмена</a>
         </form>
     </div>
 {% endblock %}

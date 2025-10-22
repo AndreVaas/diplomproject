@@ -1,21 +1,47 @@
 {% extends "repairs/base.html" %}
-
+{% load static %}
 
 {% block content %}
 <h2>Мои проекты</h2>
 <a href="{% url 'apartment_create' %}" class="button-primary">Добавить Проект</a>
-{% if apartments %}
-        <ul class="project-list">
-            {% for apt in apartments %}
-                <li>
-                    {{ apt.name }} - {{ apt.address }} ({{ apt.area }} м²)
-                    <a href="{% url 'apartment_detail' apt.id %}" class="list-button-secondary">Детали</a>
-                    <a href="{% url 'apartment_update' apt.id %}" class="list-button-secondary">Редактировать</a>
-                    <a href="{% url 'apartment_delete' apt.id %}" class="list-delete">Удалить</a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>У вас пока нет проектов.</p>
+
+{% if page_obj %}
+<ul class="project-list">
+    {% for apt in page_obj %}
+    <li class="proj-item">
+        <div class="proj-row">
+            <span class="proj-text">{{ apt.name }} — {{ apt.address }} ({{ apt.total_area }} m²)</span>
+
+            <div class="proj-dropdown">
+                <button class="proj-dropdown-btn" onclick="toggleDropdown(event, 'proj-dropdown-{{ apt.id }}')">
+                    <img src="{% static 'repairs/images/menu_icon.png' %}" alt="Действия" class="proj-menu-icon">
+                </button>
+                <div id="proj-dropdown-{{ apt.id }}" class="proj-dropdown-content">
+                    <a href="{% url 'apartment_detail' apt.id %}" class="proj-action-view">Детали</a>
+                    <a href="{% url 'apartment_update' apt.id %}" class="proj-action-edit">Редактировать</a>
+                    <a href="{% url 'apartment_delete' apt.id %}" class="proj-action-delete">Удалить</a>
+                </div>
+            </div>
+        </div>
+    </li>
+    {% empty %}
+    <li>Нет проектов на этой странице.</li>
+    {% endfor %}
+</ul>
+
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}" class="button-secondary">Предыдущая</a>
     {% endif %}
+    <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" class="button-secondary">Следующая</a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% else %}
+<p>У вас пока нет проектов.</p>
+{% endif %}
 {% endblock %}

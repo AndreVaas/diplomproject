@@ -1,0 +1,21 @@
+{% extends 'repairs/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="form-container">
+        <h2>Добро пожаловать в Калькулятор планирования ремонта!</h2>
+        <p>Это приложение поможет вам управлять проектами ремонта, отслеживать работы и материалы. Начните прямо сейчас!</p>
+        
+        <div class="action-buttons">
+            {% if user.is_authenticated %}
+                <a href="{% url 'apartment' %}" class="button-primary">Перейти к моим проектам</a>
+            {% else %}
+                <a href="{% url 'loginuser' %}" class="button-primary">Войти</a>
+                <a href="{% url 'signupuser' %}" class="button-secondary">Зарегистрироваться</a>
+            {% endif %}
+        </div>
+        
+        <p>Узнайте больше о функциях приложения или начните планировать свой ремонт сегодня.</p>
+    </div>
+</div>
+{% endblock %}

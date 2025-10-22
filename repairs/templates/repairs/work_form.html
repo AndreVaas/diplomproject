@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <div class="form-container">
-        <h2>Добавить работу в {{ room.name }}</h2>
+        <h2>{% if work.id %}Редактирование работы в {{ room.name }}{% else %}Добавить работу в {{ room.name }}{% endif %}</h2>
         {% if error %}
         <div class="custom-alert">
             {{ error }}
@@ -11,10 +11,13 @@
         {% endif %}
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            {% for field in form %}
-            <div class="form-group">
+           {% for field in form %}
+           <div class="form-group">
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                 {{ field }}
+                {% if field.name == 'date' and current_date %}
+                <small style="color: #666;">Оставьте пустым для установки текущей даты ({{ current_date|date:"d F Y" }}).</small>
+                {% endif %}
             </div>
             {% endfor %}
             <div class="form-group">

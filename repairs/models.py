@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum, F, DecimalField
+from django.utils import timezone
 
 
 # Название проекта(Квартира, частный дом) (добавил 27.07.25)
@@ -14,20 +15,9 @@ class Apartment(models.Model):
     def __str__(self):
         return self.name
 
-    # добавил методы модели Apartment,
-    # total_cost и works_cost которые вычисляют общую стоимость ремонта для конкретного проекта
-    # (добавил 04.09.25)
-    # def total_cost(self):
-    #     rooms = self.room_set.all()
-    #     works_cost = sum(room.work_set.aggregate(total_cost=Sum('cost'))['total_cost'] or 0 for room in rooms)
-    #     materials_cost = sum(
-    #     room.material_set.aggregate(total_cost=Sum(F('cost') * F('quantity')))['total_cost'] or 0 for room in rooms)
-    #     return works_cost + materials_cost
-
     def total_cost(self):
         return self.works_cost() + self.materials_cost()
 
-    # Метод total_cost упрощён, используя works_cost и materials_cost. обновлено (12.09.25)
     def works_cost(self):
         rooms = self.room_set.all()
         return sum(room.work_set.aggregate(total_cost=Sum('cost'))['total_cost'] or 0 for room in rooms)
@@ -60,8 +50,7 @@ class Work(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     cost = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateField()
-    image = models.ImageField(upload_to='work_images/', blank=True, null=True)
+    date = models.DateField(default=timezone.now, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -69,10 +58,9 @@ class Work(models.Model):
 
 # Список материалов и подсчет нужного количества, подсчет квадратуры (добавил 02.08.25)
 class Material(models.Model):
-    work = models.ForeignKey(Work, on_delete=models.CASCADE, null=True, blank=True)
+    work = models.ForeignKey(Work, on_delete=models.CASCADE, related_name='material_set', null=True, blank=True )
     name = models.CharField(max_length=100)
     quantity = models.FloatField()
-    unit = models.CharField(max_length=20)  # например: м², кг, л
     cost = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
